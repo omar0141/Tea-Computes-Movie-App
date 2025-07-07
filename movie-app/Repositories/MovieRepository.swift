@@ -21,7 +21,8 @@ class MovieRepositoryImpl: MovieRepository {
     }
     
     func getMovies() async -> [MovieModel] {
-        let movies: [MovieModel] = await remoteDataSource.getMovies()
+        var movies: [MovieModel] = await remoteDataSource.getMovies()
+        movies.sort { $0.voteAverage > $1.voteAverage }
         return movies
     }
 }
