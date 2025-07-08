@@ -5,7 +5,7 @@
 //  Created by Omar on 07/07/2025.
 //
 
-class MovieRemoteDataSource: MovieDataSource {
+class MovieRemoteDataSource {
     
     func getMovies() async -> [MovieModel] {
         var movies: [MovieModel] = []
@@ -17,7 +17,7 @@ class MovieRemoteDataSource: MovieDataSource {
         )
         do {
             let response: MovieNowPlayingResponseModel =
-                try await HttpBase.call(
+            try await HttpBase.shared.call(
                     requestModel,
                     contentType: .json,
                     responseType: MovieNowPlayingResponseModel.self

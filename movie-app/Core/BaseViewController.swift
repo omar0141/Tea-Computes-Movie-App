@@ -15,7 +15,7 @@ class BaseViewController: UIViewController {
     var props: Any?
     
     
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+    @objc func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let offset = scrollView.contentOffset.y
         let navBar = navigationController?.navigationBar
 

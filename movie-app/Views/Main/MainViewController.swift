@@ -45,7 +45,7 @@ class MainViewController: BaseViewController {
         viewModel!.$moviesList
             .receive(on: RunLoop.main)
             .sink { [weak self] data in
-                self?.movies = data as? [MovieModel] ?? []
+                self?.movies = data
                 self?.collectionView.reloadData()
             }
             .store(in: &cancellables)
@@ -53,6 +53,10 @@ class MainViewController: BaseViewController {
     }
 
 }
+
+
+
+// MARK: Collection View DataSource
 
 extension MainViewController: UICollectionViewDataSource {
     func collectionView(
@@ -72,10 +76,14 @@ extension MainViewController: UICollectionViewDataSource {
                 withReuseIdentifier: "MovieCardCellView",
                 for: indexPath
             ) as! MovieCardCellView
-        cell.configure(with: movie)
+        cell.configure(with: movie,viewModel: viewModel)
         return cell
     }
 }
+
+
+
+// MARK: Collection View Delegate Flow Layout
 
 extension MainViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(
@@ -83,8 +91,8 @@ extension MainViewController: UICollectionViewDelegateFlowLayout {
         layout collectionViewLayout: UICollectionViewLayout,
         sizeForItemAt indexPath: IndexPath
     ) -> CGSize {
-        let width = (collectionView.frame.width - 10) / 2
-        return CGSize(width: width, height: 250)
+        let width = (collectionView.frame.width - 20) / 2
+        return CGSize(width: width, height: 300)
     }
 
     func collectionView(
@@ -100,16 +108,20 @@ extension MainViewController: UICollectionViewDelegateFlowLayout {
         layout collectionViewLayout: UICollectionViewLayout,
         minimumInteritemSpacingForSectionAt section: Int
     ) -> CGFloat {
-        return 0
+        return 20
     }
 }
+
+
+
+//MARK: Collection View Delegate
 
 extension ViewController: UICollectionViewDelegate {
     func collectionView(
         _ collectionView: UICollectionView,
         didSelectItemAt indexPath: IndexPath
     ) {
-        print(indexPath.item)
+        AppRouter.shared.navigate(to: .details, data: indexPath.item)
     }
 
 }

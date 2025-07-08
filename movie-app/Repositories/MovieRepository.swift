@@ -7,22 +7,36 @@
 
 protocol MovieRepository {
     func getMovies() async -> [MovieModel]
+    
+    func saveMovies(_ movies: [MovieModel])
 }
 
 class MovieRepositoryImpl: MovieRepository {
-    
-    private let remoteDataSource: MovieDataSource
-    private let localDataSource: MovieDataSource
+    private let remoteDataSource: MovieRemoteDataSource
+    private let localDataSource: MovieLocalDataSource
 
-    
-    init(remoteDataSource: MovieDataSource, localDataSource: MovieDataSource) {
+    init(
+        remoteDataSource: MovieRemoteDataSource,
+        localDataSource: MovieLocalDataSource
+    ) {
         self.remoteDataSource = remoteDataSource
         self.localDataSource = localDataSource
     }
-    
+
     func getMovies() async -> [MovieModel] {
-        var movies: [MovieModel] = await remoteDataSource.getMovies()
-        movies.sort { $0.voteAverage > $1.voteAverage }
+        var movies: [MovieModel] = []
+        movies = localDataSource.getMovies()
+        if movies.isEmpty {
+            movies = await remoteDataSource.getMovies()
+            movies.sort { $0.voteAverage > $1.voteAverage }
+            localDataSource.saveMovies(movies)
+        }
         return movies
     }
+    
+    func saveMovies(_ movies: [MovieModel]) {
+        localDataSource.saveMovies(movies)
+    }
+    
+    
 }

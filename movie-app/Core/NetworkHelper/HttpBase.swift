@@ -13,7 +13,12 @@ enum ContentType {
 }
 
 class HttpBase {
-    static func call<T: Decodable>(
+    
+    static let shared = HttpBase()
+    
+    private init() {}
+    
+    func call<T: Decodable>(
         _ model: HttpRequestModel,
         contentType: ContentType = .formData,
         responseType: T.Type
@@ -66,7 +71,7 @@ class HttpBase {
         return decoded
     }
 
-    private static func createFormData(
+    private func createFormData(
         from dictionary: [String: Any],
         boundary: String
     ) -> Data {

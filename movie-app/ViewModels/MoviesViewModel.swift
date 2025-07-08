@@ -8,7 +8,7 @@
 import Foundation
 
 class MoviesViewModel {
-    @Published var moviesList: [Any] = []
+    @Published var moviesList: [MovieModel] = []
 
     private let movieRepository: MovieRepository
 
@@ -18,6 +18,14 @@ class MoviesViewModel {
 
     func getMovies() async {
         moviesList = await movieRepository.getMovies()
+    }
+    
+    func toggleFavorite(movie: MovieModel) {
+        let i: Int = moviesList.firstIndex(where: {$0.id == movie.id}) ?? -1
+        if i > -1 {
+            moviesList[i].isFavourite.toggle()
+        }
+        movieRepository.saveMovies(moviesList)
     }
 
 }
