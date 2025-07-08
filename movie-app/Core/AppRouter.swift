@@ -23,7 +23,7 @@ class AppRouter {
         self.navigationController = navController
     }
     
-    func createViewController(for route: StoryBoardRoutes, data: Any? = nil) -> UIViewController? {
+    func createViewController(for route: StoryBoardRoutes, data: [String: Any]? = nil) -> UIViewController? {
         var viewController: UIViewController?
         viewController = UIStoryboard.viewController(id: route.rawValue)
         if let detailsVC = viewController as? BaseViewController {
@@ -39,7 +39,7 @@ class AppRouter {
     }
     
     // Navigate with data
-    func navigate<T>(to route: StoryBoardRoutes, data: T, animated: Bool = true) {
+    func navigate(to route: StoryBoardRoutes, data: [String: Any], animated: Bool = true) {
         guard let viewController = createViewController(for: route, data: data) else { return }
         navigationController?.pushViewController(viewController, animated: animated)
     }
