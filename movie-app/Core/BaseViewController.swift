@@ -12,7 +12,7 @@ class BaseViewController: UIViewController {
         return AppRouter.shared
     }
     
-    var props: Any?
+    var props: [String:Any]?
     
     
     @objc func scrollViewDidScroll(_ scrollView: UIScrollView) {

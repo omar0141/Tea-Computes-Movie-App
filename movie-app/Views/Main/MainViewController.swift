@@ -37,10 +37,7 @@ class MainViewController: BaseViewController {
             )
             self.viewModel = MoviesViewModel(movieRepository: movieRepository)
         }
-        Task {
-            await viewModel?.getMovies()
-        }
-
+        
         // Observe published movies
         viewModel!.$moviesList
             .receive(on: RunLoop.main)
@@ -49,6 +46,12 @@ class MainViewController: BaseViewController {
                 self?.collectionView.reloadData()
             }
             .store(in: &cancellables)
+        
+        Task {
+            await viewModel?.getMovies()
+        }
+
+        
         super.viewDidLoad()
     }
 
@@ -121,7 +124,7 @@ extension MainViewController: UICollectionViewDelegate {
         _ collectionView: UICollectionView,
         didSelectItemAt indexPath: IndexPath
     ) {
-        AppRouter.shared.navigate(to: .details, data: indexPath.item)
+        AppRouter.shared.navigate(to: .details, data: ["movie": movies[indexPath.item], "viewModel": viewModel!])
     }
 
 }
