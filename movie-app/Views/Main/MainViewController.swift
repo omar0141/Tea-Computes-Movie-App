@@ -116,7 +116,7 @@ extension MainViewController: UICollectionViewDelegateFlowLayout {
 
 //MARK: Collection View Delegate
 
-extension ViewController: UICollectionViewDelegate {
+extension MainViewController: UICollectionViewDelegate {
     func collectionView(
         _ collectionView: UICollectionView,
         didSelectItemAt indexPath: IndexPath
